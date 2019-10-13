@@ -1,27 +1,24 @@
 <?php
 session_start();
 include "dbconnect.php";
-
 if (isset($_GET['Message'])) {
     print '<script type="text/javascript">
                alert("' . $_GET['Message'] . '");
            </script>';
 }
-
 if (isset($_GET['response'])) {
     print '<script type="text/javascript">
                alert("' . $_GET['response'] . '");
            </script>';
 }
-
 if(isset($_POST['submit']))
 {
   if($_POST['submit']=="login")
   { 
-        $username=$_POST['login_username'];
+        $email=$_POST['login_email'];
         $password=$_POST['login_password'];
-        $query = "SELECT * from customer where email ='$username' AND pswd='$password'";
-        $result = mysqli_query($con,$query)or die(mysql_error());
+        $query = "SELECT * from customer where email ='$email' AND pswd='$password'";
+        $result = mysqli_query($con,$query)or die(mysqli_error($con));
         if(mysqli_num_rows($result) > 0)
         {
              $row = mysqli_fetch_assoc($result);
@@ -39,19 +36,26 @@ if(isset($_POST['submit']))
   else if($_POST['submit']=="register")
   {
         $username=$_POST['register_username'];
+        $email=$_POST['register_email'];
+        $contact=$_POST['register_contact'];
         $password=$_POST['register_password'];
-        $query="select * from users where UserName = '$username'";
-        $result=mysqli_query($con,$query) or die(mysql_error);
+        $add1=$_POST['register_add1'];
+        $add2=$_POST['register_add2'];
+        $city=$_POST['register_city'];
+        $pin=$_POST['register_pin'];
+        $query="select * from customer where email = '$email'";
+        $result=mysqli_query($con,$query) or die(mysqli_error($con));
         if(mysqli_num_rows($result)>0)
         {   
                print'
                <script type="text/javascript">alert("username is taken");</script>
                     ';
-
         }
         else
         {
-          $query ="INSERT INTO users VALUES ('$username','$password')";
+          $query ="INSERT INTO customer(email, name, pswd, contact) VALUES ('$email', '$username', '$password', '$contact')";
+          $result=mysqli_query($con,$query);
+          $query ="INSERT INTO address(cid,ad1, ad2, city, pin) VALUES ((SELECT CID from customer where email = '$email'), '$add1', '$add2', '$city', '$pin')";
           $result=mysqli_query($con,$query);
           print'
                 <script type="text/javascript">
@@ -91,7 +95,6 @@ if(isset($_POST['submit']))
         #query_button {padding: 5px 20px;}
   	}
       
-
     </style>
 </head>
 <body>
@@ -127,8 +130,8 @@ if(isset($_POST['submit']))
                             <div class="modal-body">
                                           <form class="form" role="form" method="post" action="index.php" accept-charset="UTF-8">
                                               <div class="form-group">
-                                                  <label class="sr-only" for="username">Username</label>
-                                                  <input type="text" name="login_username" class="form-control" placeholder="Username" required>
+                                                  <label class="sr-only" for="email">Email</label>
+                                                  <input type="email" name="login_email" class="form-control" placeholder="Email" required>
                                               </div>
                                               <div class="form-group">
                                                   <label class="sr-only" for="password">Password</label>
@@ -164,8 +167,32 @@ if(isset($_POST['submit']))
                                                 <input type="text" name="register_username" class="form-control" placeholder="Username" required>
                                             </div>
                                             <div class="form-group">
+                                                <label class="sr-only" for="email">Email</label>
+                                                <input type="email" name="register_email" class="form-control" placeholder="Email" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="contact">Contact</label>
+                                                <input type="number" name="register_contact" class="form-control" placeholder="Contact" required>
+                                            </div>
+                                            <div class="form-group">
                                                 <label class="sr-only" for="password">Password</label>
                                                 <input type="password" name="register_password" class="form-control"  placeholder="Password" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="password">Address Line 1</label>
+                                                <input type="text" name="register_add1" class="form-control"  placeholder="Address Line 1" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="add2">Address Line 2</label>
+                                                <input type="text" name="register_add2" class="form-control"  placeholder="Address Line 2">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="city">City</label>
+                                                <input type="text" name="register_city" class="form-control"  placeholder="City" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="pin">Pin</label>
+                                                <input type="number" name="register_pin" class="form-control"  placeholder="PIN" required>
                                             </div>
                                             <div class="form-group">
                                                 <button type="submit" name="submit" value="register" class="btn btn-block">
@@ -238,7 +265,6 @@ if(isset($_POST['submit']))
                       <li> <a href="Product.php?value=Regional%20Books"> Regional Books </a> </li>
                       <li> <a href="Product.php?value=Business%20and%20Management"> Business & Management </a> </li>
                       <li> <a href="Product.php?value=Health%20and%20Cooking"> Health and Cooking </a> </li>
-
                   </ul>
               </div>
               <div class="col-md-6 col-lg-6">
@@ -258,23 +284,18 @@ if(isset($_POST['submit']))
                           <div class="item active">
                             <img class="img-responsive" src="img/carousel/1.jpg">
                           </div>
-
                           <div class="item">
                             <img class="img-responsive "src="img/carousel/2.jpg">
                           </div>
-
                           <div class="item">
                             <img class="img-responsive" src="img/carousel/3.jpg">
                           </div>
-
                           <div class="item">
                             <img class="img-responsive"src="img/carousel/4.jpg">
                           </div>
-
                           <div class="item">
                             <img class="img-responsive" src="img/carousel/5.jpg">
                           </div>
-
                           <div class="item">
                             <img class="img-responsive" src="img/carousel/6.jpg">
                           </div>
