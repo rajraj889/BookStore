@@ -90,6 +90,8 @@ if(isset($_POST['submit']))
   	@media(max-width:767px){
         #query_button {padding: 5px 20px;}
   	}
+      
+
     </style>
 </head>
 <body>
@@ -192,16 +194,38 @@ if(isset($_POST['submit']))
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-  <div id="top" >
-      <div id="searchbox" class="container-fluid" style="width:112%;margin-left:-6%;margin-right:-6%;">
-          <div>
+    <!--
+  <div id="top" class="row">
+        
+            <div class="topnav" class="col-xs-9">
+                <a class="active" href="#home">Home</a>
+                <a href="#news">News</a>
+                <a href="#contact">Contact</a>
+                <a href="#about">About</a>
+            </div>
+      <div id="searchbox" class="container-fluid" class="col-xs-3" style="margin-left:-6%;margin-right:-6%;">
               <form role="search" method="POST" action="Result.php">
                   <input type="text" class="form-control" name="keyword" style="width:80%;margin:20px 10% 20px 10%;" placeholder="Search for a Book , Author Or Category">
               </form>
-          </div>
       </div>
+-->
+<div class="container-fluid" id="searchbox">
+
+    <ul class="nav navbar-nav"  style="font-size:20px;padding-top:10px;">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Sell</a></li>
+      <li><a href="#">Something</a></li>
+    </ul>
+    
+              <form role="search" method="POST" action="Result.php" style="padding-left:70%;">
+                  <input type="text" class="form-control" name="keyword" style="width:60%;margin:20px 10% 20px 10%;" placeholder="Search for a Book , Author Or Category">
+              </form>
+  </div>
+
+
 
       <div class="container-fluid" id="header">
+      <!--
           <div class="row">
               <div class="col-md-3 col-lg-3" id="category">
                   <div style="background:#D67B22;color:#fff;font-weight:800;border:none;padding:15px;"> The Book Shop </div>
@@ -219,7 +243,7 @@ if(isset($_POST['submit']))
               </div>
               <div class="col-md-6 col-lg-6">
                   <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
-                      <!-- Indicators -->
+                     
                       <ol class="carousel-indicators">
                           <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                           <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -229,7 +253,7 @@ if(isset($_POST['submit']))
                           <li data-target="#myCarousel" data-slide-to="5"></li>
                       </ol>
                       
-                        <!-- Wrapper for slides -->
+                       
                       <div class="carousel-inner" role="listbox">
                           <div class="item active">
                             <img class="img-responsive" src="img/carousel/1.jpg">
@@ -263,6 +287,7 @@ if(isset($_POST['submit']))
                   <a href="Product.php?value=Academic%20and%20Professional"> <img class="img-responsive center-block" src="img/offers/3.png"></a>
               </div>
           </div>
+          -->
       </div>
   </div>
 
