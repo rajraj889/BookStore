@@ -20,12 +20,12 @@ if(isset($_POST['submit']))
   { 
         $username=$_POST['login_username'];
         $password=$_POST['login_password'];
-        $query = "SELECT * from users where UserName ='$username' AND Password='$password'";
+        $query = "SELECT * from customer where email ='$username' AND pswd='$password'";
         $result = mysqli_query($con,$query)or die(mysql_error());
         if(mysqli_num_rows($result) > 0)
         {
              $row = mysqli_fetch_assoc($result);
-             $_SESSION['user']=$row['UserName'];
+             $_SESSION['user']=$row['name'];
              print'
                 <script type="text/javascript">alert("successfully logged in!!!");</script>
                   ';
