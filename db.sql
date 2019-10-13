@@ -1,5 +1,5 @@
 create table customer(
-cid int not null,
+cid int not null AUTO_INCREMENT,
 email varchar(20) not null,
 name varchar(10) not null,
 pswd varchar(10) not null,
@@ -10,7 +10,7 @@ unique (contact)
 );
 
 create table wishlist(
-wid int not null,
+wid int not null AUTO_INCREMENT,
 cid int not null,
 book_name varchar(20) not null,
 author varchar(15) not null,
@@ -20,7 +20,7 @@ foreign key(cid) references customer(cid)
 );
 
 create table book(
-bid int not null,
+bid int not null AUTO_INCREMENT,
 oid int not null,
 title varchar(20) not null,
 author varchar(15) not null,
@@ -36,7 +36,7 @@ foreign key(oid) references customer (cid)
 );
 
 create table po(
-poid int not null,
+poid int not null AUTO_INCREMENT,
 bid int not null,
 buyid int not null,
 odate date not null,
@@ -47,7 +47,7 @@ foreign key(buyid) references customer(cid)
 
 
 create table ro(
-roid int not null,
+roid int not null AUTO_INCREMENT,
 bid int not null,
 buyid int not null,
 idate date not null,
@@ -61,7 +61,7 @@ foreign key(buyid) references customer(cid)
 
 
 create table address(
-cid int not null ,
+cid int not null AUTO_INCREMENT,
 ad1 varchar(20),
 ad2 varchar(15),
 city varchar(10),
@@ -121,3 +121,14 @@ insert into wishlist(wid, cid, book_name, author, publication) values(8, 5, 'Dec
 insert into wishlist(wid, cid, book_name, author, publication) values(9, 10, 'Digital Fortress', 'Dan Brown', 'Corgi books');
 
 insert into wishlist(wid, cid, book_name, author, publication) values(10, 1, 'Gone Girl', 'Gillian Flynn', 'Phoenix');
+
+insert into address values(1,' 214, Meenakshi Cplx', ' Begur Main Rd', 'Kurla', 400002);
+insert into address values(2,' 56 Sutarr Apt', ' Dvg Road', 'Dombivli', 400044);
+insert into address values(3,'  33, Gangappa Cplx', 'Gandhi Bazar', 'Kurla', 400002);
+insert into address values(4,' 82/84 Dontad Street', ' Chinch Bunder', 'Bhayander', 400054);
+insert into address values(5,'  Plot No 117', '  Penkar Pada', 'Mulund', 400037);
+insert into address values(6,' 1/8, 5 Gauri Ashish', ' Nanabhai Marg,', 'Kharghar', 400010);
+insert into address values(7,' 2, Sudama House', ' Station Road', 'Panvel', 400048);
+insert into address values(8,'  6, Jay Apt', ' Nehru Road', 'Kharghar', 400010);
+insert into address values(9,'  2, Rameshghar', 'T.kataria Marg', 'Kalyan', 400069);
+insert into address values(10,'  2 Jerome Villa', ' Azad Road', 'Thane', 400024);
