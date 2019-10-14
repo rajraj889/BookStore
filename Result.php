@@ -149,7 +149,7 @@ if(!isset($_SESSION['user']))
 include "dbconnect.php";
 $keyword=$_POST['keyword'];
 
-$query="select * from products  where PID like '%{$keyword}%' OR Title like '%{$keyword}%' OR Author like '%{$keyword}%' OR Publisher like '%{$keyword}%' OR Category like '%{$keyword}%'";
+$query="select * from book  where title like '%{$keyword}%' OR author like '%{$keyword}%' OR publication like '%{$keyword}%'";
 $result=mysqli_query($con,$query) or die(mysqli_error($con));;
 
     $i=0;
@@ -163,8 +163,8 @@ $result=mysqli_query($con,$query) or die(mysqli_error($con));;
         {   
             while($row = mysqli_fetch_assoc($result)) 
             {
-            $path="img/books/" .$row['PID'].".jpg";
-            $description="description.php?ID=".$row["PID"];
+            $path="img/book/" .$row['bid'].".jpg";
+            $description="description.php?ID=".$row["bid"];
             if($i % 3 == 0)  $offset= 0;
             else  $offset= 1; 
             if($i%3==0)
@@ -175,10 +175,10 @@ $result=mysqli_query($con,$query) or die(mysqli_error($con));;
                     <div class="book-block">
                         <img class="book block-center img-responsive" src="'.$path.'">
                         <hr>
-                         ' . $row["Title"] . '<br>
-                        ' . $row["Price"] .'  &nbsp
-                        <span style="text-decoration:line-through;color:#828282;"> ' . $row["MRP"] .' </span>
-                        <span class="label label-warning">'. $row["Discount"] .'%</span>
+                         ' . $row["title"] . '<br>
+                        ' . $row["oprice"] .'  &nbsp
+                        <span style="text-decoration:line-through;color:#828282;"> ' . $row["aprice"] .' </span>
+                        <span class="label label-warning">'.round(100-(($row['oprice']*100)/$row['aprice'])) .'%</span>
                     </div>
                 </div>
                 
