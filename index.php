@@ -22,7 +22,7 @@ if(isset($_POST['submit']))
         if(mysqli_num_rows($result) > 0)
         {
              $row = mysqli_fetch_assoc($result);
-             $_SESSION['user']=$row['name'];
+             $_SESSION['user']=$row['cid'];
              print'
                 <script type="text/javascript">alert("successfully logged in!!!");</script>
                   ';
@@ -210,7 +210,13 @@ if(isset($_POST['submit']))
             </li>';
           } 
         else
-          {   echo' <li> <a href="#" class="btn btn-lg"> Hello ' .$_SESSION['user']. '.</a></li>
+          { 
+            $id = $_SESSION['user'];
+            $query = "SELECT name from customer where cid= '$id'";
+            $result = mysqli_query($con, $query);
+            $row = mysqli_fetch_assoc($result);
+            $name = $row['name'];
+            echo' <li> <a href="#" class="btn btn-lg"> Hello ' .$name. '.</a></li>
                     <li> <a href="cart.php" class="btn btn-lg"> Cart </a> </li>; 
                     <li> <a href="destroy.php" class="btn btn-lg"> LogOut </a> </li>';
                
@@ -241,7 +247,7 @@ if(isset($_POST['submit']))
     <ul class="nav navbar-nav"  style="font-size:20px;padding-top:10px;">
       <li class="active"><a href="#">Home</a></li>
       <li><a href="#">Sell</a></li>
-      <li><a href="#">Something</a></li>
+      <li><a href="buy.php">Purchase</a></li>
     </ul>
     
               <form role="search" method="POST" action="Result.php" style="padding-left:70%;">
@@ -315,7 +321,7 @@ if(isset($_POST['submit']))
   <div class="container-fluid text-center" id="new">
       <div class="row">
          <?php
-            $query = "SELECT * from book ORDER BY RAND()";
+            $query = "SELECT * from book WHERE avail='y' ORDER BY RAND()";
             $result = mysqli_query($con, $query);
             if(mysqli_num_rows($result) > 0)
             {

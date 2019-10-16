@@ -11,7 +11,9 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/my.css" rel="stylesheet">
+
     <style>
+
       .modal-header {background:#D67B22;color:#fff;font-weight:800;}
       .modal-body{font-weight:800;}
       .modal-body ul{list-style:none;}
@@ -26,10 +28,16 @@
   	}
 
 
-<!--  eedit open -->
+#PreviewPicture {
+width: 180px ;
+height: 180px ;
+background-position: center center;
+background-size: cover;
+-webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+display: inline-block !important;
+}
+<!-- eedit close -->
 
-<-- eedit close -->
-    
     </style>
 </head>
 <body>
@@ -245,7 +253,6 @@
           </div>
           -->
       </div>
-  </div>
 
 <!-- eedit open-->
 
@@ -278,13 +285,28 @@
   Offered Price: &nbsp&nbsp&nbsp
   <input type="text" name="offered_price">
   <br><br>
-    Select image to upload:
-    <input type="file" name="fileToUpload" id="fileToUpload">
-    <input type="submit" value="Upload Image" name="submit">
+
+<script>
+function ImagePreview() { 
+ var PreviewIMG = document.getElementById('PreviewPicture'); 
+ var UploadFile    =  document.getElementById('fileToUpload').files[0];
+ var ReaderObj  =  new FileReader();
+ ReaderObj.onloadend = function () { 
+    PreviewIMG.style.backgroundImage  = "url("+ ReaderObj.result+")";
+  } 
+ if (UploadFile) {
+    ReaderObj.readAsDataURL(UploadFile);
+  } else { 
+     PreviewIMG.style.backgroundImage  = "";
+  } 
+}
+</script>
+
+<div id="PreviewPicture"></div>
+<input id="fileToUpload" type="file" name="ImageUpload" class="image" onchange="ImagePreview()" />
+
+<input type="submit" value="Upload" name="submit">
 </form>
-
-
-
 <!-- eedit close-->
   <footer style="margin-left:-6%;margin-right:-6%;">
       <div class="container-fluid">

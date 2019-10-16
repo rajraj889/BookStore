@@ -75,41 +75,38 @@ if(!isset($_SESSION['user']))
 
     <?php
     include "dbconnect.php";
-    $PID=$_GET['ID'];
-    $query = "SELECT * FROM products WHERE PID='$PID'";
+    $BID=$_GET['ID'];
+    $query = "SELECT * FROM book WHERE bid='$BID'";
     $result = mysqli_query ($con,$query)or die(mysql_error());
 
         if(mysqli_num_rows($result) > 0) 
         {   
             while($row = mysqli_fetch_assoc($result)) 
             {
-            $path="img/books/".$row['PID'].".jpg";
-            $target="cart.php?ID=".$PID."&";
+            $path="img/book/".$row['bid'].".jpg";
+            $target_cart="cart.php?ID=".$BID;
+            $target_buy="buy.php?ID=".$BID;
+            
 echo '
   <div class="container-fluid" id="books">
     <div class="row">
       <div class="col-sm-10 col-md-6">
-                          <div class="tag">'.$row["Discount"].'%OFF</div>
-                              <div class="tag-side"><img src="img/orange-flag.png">
-                          </div>
+                          
                          <img class="center-block img-responsive" src="'.$path.'" height="550px" style="padding:20px;">
       </div>
       <div class="col-sm-10 col-md-4 col-md-offset-1">
-        <h2> '. $row["Title"] . '</h2>
+        <h2> '. $row["title"] . '</h2>
                                 <span style="color:#00B9F5;">
-                                 #'.$row["Author"].'&nbsp &nbsp #'.$row["Publisher"].'
+                                 #'.$row["author"].'&nbsp &nbsp #'.$row["publication"].'
                                 </span>
         <hr>            
-                                <span style="font-weight:bold;"> Quantity : </span>';
-                                echo'<select id="quantity">';
-                                   for($i=1;$i<=$row['Available'];$i++)
-                                       echo '<option value="'.$i.'">'.$i.'</option>';
-                               echo ' </select>';
-echo'                           <br><br><br>
-                                <a id="buyLink" href="'.$target.'" class="btn btn-lg btn-danger" style="padding:15px;color:white;text-decoration:none;"> 
-                                    ADD TO CART for Rs '.$row["Price"] .' <br>
-                                    <span style="text-decoration:line-through;"> RS'.$row["MRP"].'</span> 
-                                    | '.$row["Discount"].'% discount
+                               
+                                <a id="buyLink" href="'.$target_cart.'" class="btn btn-lg btn-danger" style="padding:15px;color:white;text-decoration:none;"> 
+                                    ADD TO CART 
+                                 </a> <br>
+                                 <a id="buyLink" href="'.$target_buy.'" class="btn btn-lg btn-danger" style="padding:15px;color:white;text-decoration:none;margin-top:20px;background-color:green;"> 
+                                    BUY for Rs '.$row["oprice"] .' <br>
+                                    <span style="text-decoration:line-through;"> RS'.$row["aprice"].'</span> 
                                  </a> 
 
       </div>
@@ -119,18 +116,13 @@ echo'                           <br><br><br>
 echo '
           <div class="container-fluid" id="description">
     <div class="row">
-      <h2> Description </h2> 
-                        <p>'.$row['Description'] .'</p>
                         <pre style="background:inherit;border:none;">
-   PRODUCT CODE  '.$row["PID"].'   <hr> 
-   TITLE         '.$row["Title"].' <hr> 
-   AUTHOR        '.$row["Author"].' <hr>
-   AVAILABLE     '.$row["Available"].' <hr> 
-   PUBLISHER     '.$row["Publisher"].' <hr> 
-   EDITION       '.$row["Edition"].' <hr>
-   LANGUAGE      '.$row["Language"].' <hr>
-   PAGES         '.$row["page"].' <hr>
-   WEIGHT        '.$row["weight"].' <hr>
+   TITLE         '.$row["title"].' <hr> 
+   AUTHOR        '.$row["author"].' <hr>
+   AVAILABLE     '.$row["avail"].' <hr> 
+   PUBLISHER     '.$row["publication"].' <hr> 
+   EDITION       '.$row["edition"].' <hr>
+   MODE          '.$row["mode"].' <hr>
                         </pre>
     </div>
   </div>
@@ -143,31 +135,6 @@ echo '
     ?>
 
 
-
-<div class="container-fluid" id="service">
-      <div class="row">
-          <div class="col-sm-6 col-md-3 text-center">
-               <span class="glyphicon glyphicon-heart"></span> <br>
-               24X7 Care <br>
-               Happy to help 24X7, call us on 0120-3062244 or click here
-          </div>
-          <div class="col-sm-6 col-md-3 text-center">
-               <span class="glyphicon glyphicon-ok"></span> <br>
-               Trust <br>
-               Your money is yours! All refunds come with no question asked guarantee.
-          </div>
-          <div class="col-sm-6 col-md-3 text-center">
-               <span class="glyphicon glyphicon-check"></span> <br>
-               Assurance <br>
-               We provide 100% assurance. If you have any issue, your money is immediately refunded. Sit back and enjoy your shopping.
-          </div>
-          <div class="col-sm-6 col-md-3 text-center">
-               <span class="glyphicon glyphicon-tags"></span> <br>
-               24X7 Care <br>
-               Happiness is guaranteed. If we fall short of your expectations, give us a shout.
-          </div>
-      </div>
-</div>
  
 
 
@@ -175,7 +142,7 @@ echo '
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-<script>
+<!--script>
             $(function () {
                 var link = $('#buyLink').attr('href');
                 $('#buyLink').attr('href', link + 'quantity=' + $('#quantity option:selected').val());
@@ -183,6 +150,6 @@ echo '
                     $('#buyLink').attr('href', link + 'quantity=' + $('#quantity option:selected').val());
                 });
             });
-    </script>
+    </script-->
 </body>
 </html>       

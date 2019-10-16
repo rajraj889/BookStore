@@ -7,19 +7,9 @@
 ?>
 <?php
 
-        if(isset($_GET['place']))
-                 {  
-                    $query="DELETE FROM cart where Customer='$customer'";
-                    $result=mysqli_query($con,$query);
-                 ?>
-                    <script type="text/javascript">
-                         alert("Order SuccessFully Placed!! Kindly Keep the cash Ready. It will be collected on Delivery");
-                    </script>
-                 <?php                  
-                  }
         if(isset($_GET['remove']))
                  {  $product=$_GET['remove'];
-                    $query="DELETE FROM cart where Customer='$customer' AND Product='$product'";
+                    $query="DELETE FROM wishlist where cid='$customer' AND wid = '$product'";
                     $result=mysqli_query($con,$query);
                  ?>
                     <script type="text/javascript">
@@ -173,6 +163,7 @@
               </form>
           </div>
       </div>
+    </div>
 
 
 	<?php
@@ -188,51 +179,67 @@ echo '<div class="container-fluid" id="cart">
               	if(isset($_GET['ID']))
 	            {   
                         $product=$_GET['ID'];
-                        $quantity=$_GET['quantity'];
-                        $query="SELECT * from cart where Customer='$customer' AND Product='$product'";
+                        $query="SELECT * from wishlist where cid='$customer' AND wid='$product'";
                         $result=mysqli_query($con,$query);
                         $row = mysqli_fetch_assoc($result);
                         if(mysqli_num_rows($result)==0)
-	                         { $query="INSERT INTO cart values('$customer','$product','$quantity')"; 
+	                         { 
+                            $query = "SELECT title, author, publication from book where bid='$product'";
+                            $result = mysqli_query($con, $query);
+                            $row = mysqli_fetch_assoc($result);
+
+                            $book_name = $row['title'];
+                            $author = $row['author'];
+                            $publication = $row['publication'];
+                            
+                            $query="INSERT INTO wishlist(cid, book_name, author, publication) VALUES('$customer', '$book_name', '$author', '$publication')"; 
                               $result=mysqli_query($con,$query);
                             }
                         else
-                           { $new=$_GET['quantity'];
-                             $query="UPDATE `cart` SET Quantity=$new WHERE Customer='$customer' AND Product='$product'";
-	                           $result=mysqli_query($con,$query);
-                            }
+                           {
+                            
+                        }
                     }
-              	$query="SELECT PID,Title,Author,Edition,Quantity,Price FROM cart INNER JOIN products ON cart.Product=products.PID 
-              	        WHERE Customer='$customer'";
-	        $result=mysqli_query($con,$query); 
+              	$query="SELECT wid,bid,book_name,wishlist.author,edition,oprice,avail,mode FROM wishlist INNER JOIN book ON wishlist.book_name=book.title 
+              	        WHERE cid='$customer'";
+	        $result=mysqli_query($con,$query);
+        echo mysqli_error($con);
                 $total=0;
                 if(mysqli_num_rows($result)>0)
                 {    $i=1;
                      $j=0;
                      while($row = mysqli_fetch_assoc($result))
-                     {       $path = "img/books/".$row['PID'].".jpg";
-                             $Stotal = $row['Quantity'] * $row['Price'];
+                     {       $path = "img/book/".$row['bid'].".jpg";
+                             $Stotal = $row['oprice'];
                              if($i % 2 == 1)  $offset= 1;
                              if($i % 2 == 0)  $offset= 2;                                                
                              if($j%2==0)
-                                 echo '<div class="row">'; 
+                                 echo '<div class="row">';
+                                if($row['mode']=='p')
+                                {
+                                    $mode = "Purchase";
+                                }
+                                else{
+                                    $mode = "Rent";
+                                }
                                  echo '                
                                       <div class="panel col-xs-12 col-sm-4 col-sm-offset-'.$offset.' col-md-4 col-md-offset-'.$offset.' col-lg-4 col-lg-offset-'.$offset.' text-center" style="color:#D67B22;font-weight:800;">
                                           <div class="panel-heading">Order '. $i .'
                                           </div>
                                           <div class="panel-body">
-			                                                <img class="image-responsive block-center" src="'.$path.'" style="height :100px;"> <br>
-           							                                               Title : '.$row['Title'].'  <br> 
-                                                                        Code : '.$row['PID'].'     <br>        	 
-                                                      									Author : '.$row['Author'].' <br>                            	      
-                                                      									Edition : '.$row['Edition'].' <br>
-                                                      									Quantity : '.$row['Quantity'].' <br>
-                                                      									Price : '.$row['Price'].' <br>
-                                                      									Sub Total : '.$Stotal.' <br>
-                                                                       <a href="cart.php?remove='.$row['PID'].'" class="btn btn-sm" 
-                                                                          style="background:#D67B22;color:white;font-weight:800;">
-                                                                          Remove
-                                                                        </a>
+                                          <img class="image-responsive block-center" src="'.$path.'" style="height :100px;"> <br>
+                                          Title : '.$row['book_name'].'  <br>       	 
+                                          Author : '.$row['author'].' <br>                            	      
+                                          Edition : '.$row['edition'].' <br>
+                                          Availability : '.$row['avail'].' <br>
+                                          Mode : '.$mode.' <br>
+                                          
+                                            Price : '.$row['oprice'].' <br>
+                                            Sub Total : '.$Stotal.' <br>
+                                            <a href="cart.php?remove='.$row['wid'].'" class="btn btn-sm" 
+                                              style="background:#D67B22;color:white;font-weight:800;">
+                                              Remove
+                                            </a>
                                         </div>
                                     </div>';
                                if($j % 2==1)
@@ -242,25 +249,10 @@ echo '<div class="container-fluid" id="cart">
                                $j++;                                                 
                      } 
                     
-                    echo '<div class="container">
-                              <div class="row">  
-                                 <div class="panel col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 text-center" style="color:#D67B22;font-weight:800;">
-                                     <div class="panel-heading">TOTAL
-                                     </div>
-                                      <div class="panel-body">'.$total.'
-                                     </div>
-                                 </div>
-                               </div>
-                          </div>
-                         ';
+                    
                      echo '<br> <br>';
-                     echo '<div class="row">
-                             <div class="col-xs-8 col-xs-offset-2  col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-3 col-lg-4 col-lg-offset-3">
+                     echo '<div class="row text-center" >
                                   <a href="index.php" class="btn btn-lg" style="background:#D67B22;color:white;font-weight:800;">Continue Shopping</a>
-                             </div>
-                             <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-1 col-lg-4 ">
-                                  <a href="cart.php?place=true" class="btn btn-lg" style="background:#D67B22;color:white;font-weight:800;margin-top:5px;">Place Order</a>
-                             </div>
                            </div>
                            ';
                 } 
