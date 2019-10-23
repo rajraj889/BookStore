@@ -71,7 +71,9 @@ if(isset($_POST['submit']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -245,10 +247,18 @@ if(isset($_POST['submit']))
 <div class="container-fluid" id="searchbox">
 
     <ul class="nav navbar-nav"  style="font-size:20px;padding-top:10px;">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Sell</a></li>
-      <li><a href="buy.php">Purchase</a></li>
+      <li class="active"><a href="index.php">Home</a></li>
+      <li><a href="form.php">Sell</a></li>
+      <li><a href="buy.php">History</a></li>
+       
+        <li>Category:
+    <select name="mod" id="filter">
+  <option value="fiction">Fiction</option>
+  <option value="action">Action</option>
+  <option value="literature">Literature</option>
+    </select></li>
     </ul>
+    
     
               <form role="search" method="POST" action="Result.php" style="padding-left:70%;">
                   <input type="text" class="form-control" name="keyword" style="width:60%;margin:20px 10% 20px 10%;" placeholder="Search for a Book , Author Or Category">
@@ -316,10 +326,9 @@ if(isset($_POST['submit']))
           </div>
           -->
       </div>
-  </div>
 
   <div class="container-fluid text-center" id="new">
-      <div class="row">
+      <div class="row" id="hid">
          <?php
             $query = "SELECT * from book WHERE avail='y' ORDER BY RAND()";
             $result = mysqli_query($con, $query);
@@ -329,8 +338,8 @@ if(isset($_POST['submit']))
                 while($row= mysqli_fetch_array($result)){
                     if($i<4){
           ?>
-          <div class="col-sm-6 col-md-3 col-lg-3">
-              <a href=<?php echo "description.php?ID=".$row['bid'] ?>>
+          <div class="col-sm-6 col-md-3 col-lg-3" >
+              <a href=<?php echo "description.php?ID=".$row['bid'] ?> >
                   <div class="book-block">
                       <img class="book block-center img-responsive" src=<?php echo "img/book/".$row['bid'].".jpg" ?>>
                       <hr>
@@ -359,37 +368,6 @@ if(isset($_POST['submit']))
       </div>
   </div>
 
-  <div class="container-fluid" id="author">
-      <h3 style="color:#D67B22;"> POPULAR AUTHORS </h3>
-      <div class="row">
-          <div class="col-sm-5 col-md-3 col-lg-3">
-              <a href="Author.php?value=Durjoy%20Datta"><img class="img-responsive center-block" src="img/popular-author/0.jpg"></a>
-          </div>
-          <div class="col-sm-6 col-md-3 col-lg-3">
-              <a href="Author.php?value=Chetan%20Bhagat"><img class="img-responsive center-block" src="img/popular-author/1.jpg"></a>
-          </div>
-          <div class="col-sm-6 col-md-3 col-lg-3">
-              <a href="Author.php?value=Dan%20Brown"><img class="img-responsive center-block" src="img/popular-author/2.jpg"></a>
-          </div>
-          <div class="col-sm-6 col-md-3 col-lg-3">
-              <a href="Author.php?value=Ravinder%20Singh"><img class="img-responsive center-block" src="img/popular-author/3.jpg"></a>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-sm-5 col-md-3 col-lg-3">
-              <a href="Author.php?value=Jeffrey%20Archer"><img class="img-responsive center-block" src="img/popular-author/4.jpg"></a>
-          </div>
-          <div class="col-sm-6 col-md-3 col-lg-3">
-              <a href="Author.php?value=Salman%20Rushdie"><img class="img-responsive center-block" src="img/popular-author/5.jpg"><a>
-          </div>
-          <div class="col-sm-6 col-md-3 col-lg-3">
-              <a href="Author.php?value=J%20K%20Rowling"><img class="img-responsive center-block" src="img/popular-author/6.jpg"></a>
-          </div>
-          <div class="col-sm-6 col-md-3 col-lg-3">
-              <a href="Author.php?value=Subrata%20Roy"><img class="img-responsive center-block" src="img/popular-author/7.jpg"></a>
-          </div>
-      </div>
-  </div>
 
   <footer style="margin-left:-6%;margin-right:-6%;">
       <div class="container-fluid">
@@ -439,45 +417,6 @@ if(isset($_POST['submit']))
       </div>
   </footer>
 
-<div class="container">
-  <!-- Trigger the modal with a button -->
-  <button type="button" id="query_button" class="btn btn-lg" data-toggle="modal" data-target="#query">Ask query</button>
-  <!-- Modal -->
-  <div class="modal fade" id="query" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header text-center">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Ask your query here</h4>
-          </div>
-          <div class="modal-body">           
-                    <form method="post" action="query.php" class="form" role="form">
-                        <div class="form-group">
-                             <label class="sr-only" for="name">Name</label>
-                             <input type="text" class="form-control"  placeholder="Your Name" name="sender" required>
-                        </div>
-                        <div class="form-group">
-                             <label class="sr-only" for="email">Email</label>
-                             <input type="email" class="form-control" placeholder="abc@gmail.com" name="senderEmail" required>
-                        </div>
-                        <div class="form-group">
-                             <label class="sr-only" for="query">Message</label>
-                             <textarea class="form-control" rows="5" cols="30" name="message" placeholder="Your Query" required></textarea>
-                        </div>
-                        <div class="form-group">
-                              <button type="submit" name="submit" value="query" class="btn btn-block">
-                                                              Send Query
-                               </button>
-                        </div>
-                    </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-      </div>
-    </div>  
-  </div>
-</div>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

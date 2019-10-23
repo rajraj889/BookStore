@@ -1,3 +1,11 @@
+
+<?php
+	session_start();
+  if(!isset($_SESSION['user']))
+       header("location: index.php?Message=Login To Continue");
+	include "dbconnect.php";
+         $customer=$_SESSION['user'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +59,7 @@ display: inline-block !important;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#" style="padding: 1px;"><img class="img-responsive" alt="Brand" src="img/logo.jpg"  style="width: 147px;margin: 0px;"></a>
+          <a class="navbar-brand" href="index.php" style="padding: 1px;"><img class="img-responsive" alt="Brand" src="img/logo.jpg"  style="width: 147px;margin: 0px;"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -153,7 +161,7 @@ display: inline-block !important;
             </li>';
           } 
         else
-          {   echo' <li> <a href="#" class="btn btn-lg"> Hello ' .$_SESSION['user']. '.</a></li>
+          {   echo' <li> <a href="#" class="btn btn-lg"> Hello ' .$customer. '.</a></li>
                     <li> <a href="cart.php" class="btn btn-lg"> Cart </a> </li>; 
                     <li> <a href="destroy.php" class="btn btn-lg"> LogOut </a> </li>';
                
@@ -168,7 +176,7 @@ display: inline-block !important;
   <div id="top" class="row">
         
             <div class="topnav" class="col-xs-9">
-                <a class="active" href="#home">Home</a>
+                <a class="active" href="index.php">Home</a>
                 <a href="#news">News</a>
                 <a href="#contact">Contact</a>
                 <a href="#about">About</a>
@@ -182,9 +190,9 @@ display: inline-block !important;
 <div class="container-fluid" id="searchbox">
 
     <ul class="nav navbar-nav"  style="font-size:20px;padding-top:10px;">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Sell</a></li>
-      <li><a href="#">Something</a></li>
+      <li class="active"><a href="index.php">Home</a></li>
+      <li><a href="form.php">Sell</a></li>
+      <li><a href="buy.php">Purchase</a></li>
     </ul>
     
               <form role="search" method="POST" action="Result.php" style="padding-left:70%;">
@@ -257,7 +265,7 @@ display: inline-block !important;
 <!-- eedit open-->
 
 <form action="upload.php" method="post" enctype="multipart/form-data">
-
+          <?php  echo $_SESSION['user'] ?>
   Title: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
   <input type="text" name="title">
   <br><br>
@@ -356,45 +364,6 @@ function ImagePreview() {
       </div>
   </footer>
 
-<div class="container">
-  <!-- Trigger the modal with a button -->
-  <button type="button" id="query_button" class="btn btn-lg" data-toggle="modal" data-target="#query">Ask query</button>
-  <!-- Modal -->
-  <div class="modal fade" id="query" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header text-center">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Ask your query here</h4>
-          </div>
-          <div class="modal-body">           
-                    <form method="post" action="query.php" class="form" role="form">
-                        <div class="form-group">
-                             <label class="sr-only" for="name">Name</label>
-                             <input type="text" class="form-control"  placeholder="Your Name" name="sender" required>
-                        </div>
-                        <div class="form-group">
-                             <label class="sr-only" for="email">Email</label>
-                             <input type="email" class="form-control" placeholder="abc@gmail.com" name="senderEmail" required>
-                        </div>
-                        <div class="form-group">
-                             <label class="sr-only" for="query">Message</label>
-                             <textarea class="form-control" rows="5" cols="30" name="message" placeholder="Your Query" required></textarea>
-                        </div>
-                        <div class="form-group">
-                              <button type="submit" name="submit" value="query" class="btn btn-block">
-                                                              Send Query
-                               </button>
-                        </div>
-                    </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-      </div>
-    </div>  
-  </div>
-</div>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

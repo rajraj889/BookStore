@@ -181,37 +181,129 @@
 echo '<div class="container-fluid" id="cart">
       <div class="row">
           <div class="col-xs-12 text-center" id="heading">
-                 <h2 style="color:#D67B22;text-transform:uppercase;">  YOUR CART </h2>
+                 <h2 style="color:#D67B22;text-transform:uppercase;">  YOUR ORDERS </h2>
            </div>
         </div>';
 	if(isset($_SESSION['user']))
 	    {   
+        global $mode;
               	if(isset($_GET['ID']))
 	            {   
                     $product=$_GET['ID'];
                     $query = "Select mode from book where bid=$product";
                     $result = mysqli_query($con, $query);
                     $row = mysqli_fetch_assoc($result);
-                    $mode = $row['mode'];
+                    
+                    $mode= $row['mode'];
                     if($mode == 'p'){
                         $date = date('Y-m-d');
                         $query = "INSERT into po values(NULL, '$product', '$customer', '$date')";
+                        $result = mysqli_query($con, $query);
+                        $query = "UPDATE book SET avail='n' where bid='$product'";
                         $result = mysqli_query($con, $query);
                     }
                     elseif($mode == 'r')
                     {
                         $date = date('Y-m-d');
-                        $query = "INSERT into ro values(NULL, '$product', '$customer', '$date')";
+                        $query = "INSERT into ro(bid, buyid, idate) values('$product', '$customer', '$date')";
+                        $result = mysqli_query($con, $query);
+                        $query = "UPDATE book SET avail='n' where bid='$product'";
                         $result = mysqli_query($con, $query);
                     }
                         
                     }
-              	              
-	    }
-	else
-	    { 
-	          echo "login to continue";
-	    }
+        
+        echo '<div class="container-fluid" id="cart">
+      <div class="row">
+          <div class="col-xs-12 text-center" id="heading">
+                 <h2 style="color:#D67B22;text-transform:uppercase;">  PURCHASE </h2>
+           </div>
+        </div>';
+        
+                $query = "SELECT po.bid,book.title,book.author,book.edition,book.mode,book.oprice from book,po where po.bid=book.bid AND po.buyid='$customer'";
+                $result = mysqli_query($con, $query);
+        
+            if(mysqli_num_rows($result)>0)
+                {    $i=1;
+                     $j=0;
+                     while($row = mysqli_fetch_assoc($result))
+                     {       $path = "img/book/".$row['bid'].".jpg";
+                             if($i % 2 == 1)  $offset= 1;
+                             if($i % 2 == 0)  $offset= 2;                                                
+                             if($j%2==0)
+                                 echo '                
+                                      <div class="panel col-xs-12 col-sm-4 col-sm-offset-'.$offset.' col-md-4 col-md-offset-'.$offset.' col-lg-4 col-lg-offset-'.$offset.' text-center" style="color:#D67B22;font-weight:800;">
+                                          <div class="panel-heading">Order '. $i .'
+                                          </div>
+                                          <div class="panel-body">
+                                          <img class="image-responsive block-center" src="'.$path.'" style="height :100px;"> <br>
+                                          Title : '.$row['title'].'  <br>       	 
+                                          Author : '.$row['author'].' <br>                            	      
+                                          Edition : '.$row['edition'].' <br>
+                                          Mode : Purchase <br>
+                                          
+                                            Price : '.$row['oprice'].' <br>
+                                            <a href="cart.php?remove='.$row['bid'].'" class="btn btn-sm" 
+                                              style="background:#D67B22;color:white;font-weight:800;">
+                                              Remove
+                                            </a>
+                                        </div>
+                                    </div>';
+                               if($j % 2==1)
+                                   echo '</div>';                                   
+                               $i++;
+                               $j++;                                                 
+                     } 
+                    
+                } 
+            }
+    echo '<div class="container-fluid" id="cart">
+      <div class="row">
+          <div class="col-xs-12 text-center" id="heading">
+                 <h2 style="color:#D67B22;text-transform:uppercase;">  RENT </h2>
+           </div>
+        </div>';
+    
+            
+    $query = "SELECT ro.bid,book.title,book.author,book.edition,book.mode,book.oprice from book,ro where ro.bid=book.bid AND ro.buyid=$customer";
+                $result = mysqli_query($con, $query);
+            
+            if(mysqli_num_rows($result)>0)
+                {    $i=1;
+                     $j=0;
+                     while($row = mysqli_fetch_assoc($result))
+                     {       $path = "img/book/".$row['bid'].".jpg";
+                             if($i % 2 == 1)  $offset= 1;
+                             if($i % 2 == 0)  $offset= 2;                                                
+                             if($j%2==0)
+                                 echo '                
+                                      <div class="panel col-xs-12 col-sm-4 col-sm-offset-'.$offset.' col-md-4 col-md-offset-'.$offset.' col-lg-4 col-lg-offset-'.$offset.' text-center" style="color:#D67B22;font-weight:800;">
+                                          <div class="panel-heading">Order '. $i .'
+                                          </div>
+                                          <div class="panel-body">
+                                          <img class="image-responsive block-center" src="'.$path.'" style="height :100px;"> <br>
+                                          Title : '.$row['title'].'  <br>       	 
+                                          Author : '.$row['author'].' <br>                            	      
+                                          Edition : '.$row['edition'].' <br>
+                                          Mode : Rent <br>
+                                          
+                                            Price : '.$row['oprice'].' <br>
+                                            <a href="cart.php?remove='.$row['bid'].'" class="btn btn-sm" 
+                                              style="background:#D67B22;color:white;font-weight:800;">
+                                              Remove
+                                            </a>
+                                        </div>
+                                    </div>';
+                               if($j % 2==1)
+                                   echo '</div>';                             
+                               $i++;
+                               $j++;                                                 
+                     } 
+                    
+                    
+                     
+                } 
+            
         echo '</div>';
 	?>
 
